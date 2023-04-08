@@ -1,0 +1,186 @@
+{%extends "public/public_templates.html"%}
+
+{% block title %}
+Prescricao
+{% endblock %}
+
+{% block main %}
+
+
+<figure class="text-center">
+    <h1 class="h1">Prescrição</h1>
+    <h6 class="h6">v 1.0</h6>
+</figure>
+
+
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#prescricao-punitiva">Prescrição da Pretensão
+                Punitiva</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#prescricao-executoria">Prescrição da Pretensão Executória</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="prescricao-punitiva" class="tab-pane fade show active">
+            <!-- Aqui você coloca o seu formulário -->
+            <br>
+            <form id="myForm" action="{{url_for('prescricao')}}" method="POST">
+
+                <label for="processo" style="width: 400px; display: flex; justify-content: left;">Processo</label>
+                <input class="form-control form-control-sm" type="text" name="processo"
+                       id="processo"
+                       style="width: 400px; display: flex; justify-content: left;">
+                <br>
+
+                <label for="reu" style="width: 400px; display: flex; justify-content: left;">Nome do Réu</label>
+                <input class="form-control form-control-sm" type="text" name="reu" id="reu"
+                       style="width: 400px; display: flex; justify-content: left;">
+                <br>
+
+                <label for="formFileSm" style="width: 400px; display: flex; justify-content: left;">Data do Fato</label>
+                <input class="form-control form-control-sm" type="date" onfocus="this.showPicker()" name="data_fato"
+                       id="formFileSm" multiple required
+                       style="width: 400px; display: flex; justify-content: left; cursor: pointer; appearance: none;">
+                <br>
+
+
+                <label for="legislacao"
+                       style="width: 400px; display: flex; justify-content: left;">Legislação</label>
+
+                <select class="form-control form-control-sm" id="legislacao" name="legislacao" required
+                        style="width: 400px; display: flex; justify-content: left;">
+                    <option value="" selected disabled>Legislacao</option>
+                    {% for codigo in legislacao %}
+                    <option value="{{codigo}}">{{codigo}}</option>
+                    {% endfor %}
+                </select>
+
+                <br>
+
+
+                <label for="crime"
+                       style="width: 400px; display: flex; justify-content: left;">Tipo Penal</label>
+
+
+                <select class="form-control form-control-sm" id="crime" name="crime" required
+                        style="width: 400px; display: flex; justify-content: left;">
+                    <option value="" selected disabled>Tipo Penal</option>
+                </select>
+
+
+                <br>
+
+                <p> Recebimento da Denuncia</p>
+
+                <label for="recebimento_denuncia_true">Sim</label>
+                <input type="radio" id="recebimento_denuncia_true" onclick="show_hide_display_denuncia()"
+                       name="recebimento_denuncia_bool" value=True required
+                       style="width: 100px; ">
+
+
+                <label for="recebimento_denuncia_false">Não</label>
+                <input type="radio" id="recebimento_denuncia_false" onclick="show_hide_display_denuncia()"
+                       name="recebimento_denuncia_bool" value=False
+                       style="width: 100px; ">
+                <br> <br>
+
+                <div id="display_oculta_denuncia" style="display: none;">
+                    <label for="Dt_Denuncia" style="width: 400px; display: flex; justify-content: left;">Data do
+                        Recebimento da Denúncia </label>
+                    <input class="form-control form-control-sm" onfocus="this.showPicker()" type="date"
+                           name="Dt_Denuncia"
+                           id="Dt_Denuncia" multiple
+                           style="width: 400px; display: flex; justify-content: left;">
+                    <br>
+                </div>
+
+
+                <p> Suspensão do Prazo Prescricional</p>
+
+                <label for="suspensao_prescricao_true">Sim</label>
+                <input type="radio" id="suspensao_prescricao_true" onclick="show_hide_display()"
+                       name="suspensao_prescricao_bool" value=True required
+                       style="width: 100px; ">
+
+
+                <label for="suspensao_prescricao_false">Não</label>
+                <input type="radio" id="suspensao_prescricao_false" onclick="show_hide_display()"
+                       name="suspensao_prescricao_bool" value=False
+                       style="width: 100px; ">
+                <br> <br>
+
+
+                <div id="display_oculta" style="display: none;">
+                    <label for="Dt_inicio_suspensao">Data Início
+                        da Suspensão da Prescrição </label>
+
+                    <input class="form-control form-control-sm " onfocus="this.showPicker()" type="date"
+                           name="Dt_inicio_suspensao"
+                           id="Dt_inicio_suspensao" multiple
+                           style="width: 400px; display: flex; justify-content: left;">
+                    <br>
+
+                    <label for="Dt_fim_suspensao">Data Fim da
+                        Suspensão da Prescrição </label>
+                    <input class="form-control form-control-sm " onfocus="this.showPicker()" type="date"
+                           name="Dt_fim_suspensao"
+                           id="Dt_fim_suspensao" multiple
+                           style="width: 400px; display: flex; justify-content: left;">
+                    <br>
+                </div>
+
+
+                <p> Verifica Idade do Autor -> Redução do Prazo Prescricional</p>
+
+                <label for="Verifica_Idade_do_Autor_do_Fato_True">Sim</label>
+                <input type="radio" id="Verifica_Idade_do_Autor_do_Fato_True"
+                       onclick="show_hide_display_data_nascimento_autor()"
+                       name="Verifica_Idade_do_Autor" value=True required
+                       style="width: 100px; ">
+
+
+                <label for="Verifica_Idade_do_Autor_do_Fato_False">Não</label>
+                <input type="radio" id="Verifica_Idade_do_Autor_do_Fato_False"
+                       onclick="show_hide_display_data_nascimento_autor()"
+                       name="Verifica_Idade_do_Autor" value="False"
+                       style="width: 100px; ">
+                <br> <br>
+
+
+                <div id="display_oculta2" style="display: none; margin-bottom: 20px;">
+                    <label for="Data_Verifica_Idade_do_Autor_do_Fato">Data de Nascimento do Autor do Fato</label>
+
+                    <input class="form-control form-control-sm " onfocus="this.showPicker()" type="date"
+                           name="Data_Verifica_Idade_do_Autor_do_Fato"
+                           id="Data_Verifica_Idade_do_Autor_do_Fato" multiple
+                           style="width: 400px; display: flex; justify-content: left;">
+                    <br>
+                </div>
+
+
+                <input class="btn btn-primary" type="reset" value="Limpar Campos">
+
+                <button class="btn btn-primary" type="submit" value="Submit">Analisar</button>
+
+
+            </form>
+            <br><br><br><br>
+            <br><br><br><br>
+            <br><br><br><br>
+
+
+        </div>
+        <div id="prescricao-executoria" class="tab-pane fade">
+            <!-- Aqui você coloca o código para a segunda aba -->
+            <p>Em Construção</p>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
