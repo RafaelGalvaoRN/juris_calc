@@ -2,10 +2,12 @@ from app import app
 from flask import render_template, request
 from app.util import *
 
+legislacao = ['Código Penal', 'Lei Maria da Penha', 'Lei de Drogas', 'Lei 9.099 / 95', 'Lei de Lavagem']
+
 
 @app.route('/')
 def index():
-    return render_template("public/index.html")
+    return render_template('public/prescricao.html', legislacao=legislacao)
 
 
 @app.route('/faq')
@@ -26,7 +28,6 @@ def documentacao():
 @app.route('/prescricao', methods=["GET", "POST"])
 def prescricao():
     if request.method == "GET":
-        legislacao = ['Código Penal', 'Lei Maria da Penha', 'Lei de Drogas', 'Lei 9.099 / 95', 'Lei de Lavagem']
 
         return render_template('public/prescricao.html', legislacao=legislacao)
 
@@ -44,7 +45,9 @@ def prescricao():
             'Dt_fim_suspensao': request.form['Dt_fim_suspensao'],
             'verificacao_idade': request.form['Verifica_Idade_do_Autor'],
             'idade_autor': request.form['Data_Verifica_Idade_do_Autor_do_Fato']
+
         }
+        print(dados_prescricao['verificacao_idade'])
 
         resultado, parecer = analisa_prescricao(dados_prescricao)
 
@@ -56,11 +59,16 @@ def prescricao():
 
         #seta variáveis menor de vinte e um anos e maior de setenta anos - usa fórmula e estrutura ternária para converter True em Sim e False em Nao
         if dados_prescricao['verificacao_idade'] == "True":
+            # print('entrei no if')
+            # print(calcula_se_e_menor_21_tempo_crime(dados_prescricao['idade_autor'], dados_prescricao['data_fato']))
+
             menor_de_vinte_um = "Sim" if calcula_se_e_menor_21_tempo_crime(dados_prescricao['idade_autor'],
                                                                            dados_prescricao[
-                                                                               'data_fato']) == "True" else "Não"
+                                                                               'data_fato']) == True else "Não"
+            # print('aqui aqui')
+            # print(menor_de_vinte_um)
             maior_de_setenta = "Sim" if calcula_se_e_maior_de_setenta_anos(
-                dados_prescricao['idade_autor']) == "True" else "Não"
+                dados_prescricao['idade_autor']) == True else "Não"
 
         else:
             menor_de_vinte_um = '-'

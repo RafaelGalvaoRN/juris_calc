@@ -1,2 +1,19 @@
 
 {%extends "public/public_templates.html"%}
+{% block title %}
+Contato
+{% endblock %}
+
+{% block main %}
+<section class="section-rafa">
+    <h1 class="text-center"> Contatos</h1>
+    <ul>
+
+        <span class="img-thumbnail">
+            <img id="img_email" src="{{url_for('static', filename='img/logo1.jpg')}}" alt="imagem de email">
+            <p>E-mail para contato: <b>rafaelgalvaorn@hotmail.com</b></p>
+        </span>
+    </ul>
+</section>
+
+{% endblock %}
